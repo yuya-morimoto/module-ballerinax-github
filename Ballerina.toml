@@ -1,5 +1,12 @@
 [package]
-org = "zero_hack"
+org = "zerohack"
 name = "github"
 version = "0.1.0"
+authors = ["yuya-morimoto"]
+keywords = ["github"]
+repository = "https://github.com/zero-hack-org/module-zerohack-github"
+license = ["Apache-2.0"]
 distribution = "2201.7.1"
+
+[build-options]
+observabilityIncluded=true
