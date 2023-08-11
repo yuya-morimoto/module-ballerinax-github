@@ -56,6 +56,7 @@ public class GraphQlClient {
         }
 
         record {|anydata...;|}|graphql:ClientError result = self.githubClient->execute(query, clonedVariables, operationName, clonedHeaders);
+
         return result;
     };
 
