@@ -23,14 +23,15 @@ public class GraphQlClient {
     }
 
     # Query execute
+    # Auto setting variables(username) and headers(token)
     #
-    # + document - Query
+    # + query - Query
     # + variables - Query parameter
     # + operationName - Operation name
     # + headers - Request headers
     # + return - Response
     public function execute(
-            string document,
+            string query,
             map<anydata>? variables = (),
             string? operationName = (),
             map<string|string[]>? headers = ()
@@ -54,7 +55,7 @@ public class GraphQlClient {
             clonedHeaders[REQUEST_HEADER_AUTHORIZATION_KEY] = string `bearer ${githubPersonalAccessToken}`;
         }
 
-        record {|anydata...;|}|graphql:ClientError result = self.githubClient->execute(document, clonedVariables, operationName, clonedHeaders);
+        record {|anydata...;|}|graphql:ClientError result = self.githubClient->execute(query, clonedVariables, operationName, clonedHeaders);
         return result;
     };
 
