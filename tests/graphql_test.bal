@@ -1,7 +1,8 @@
 import ballerina/graphql;
 import ballerina/test;
 
-function testInitDataProvider() returns map<[boolean, string, graphql:ClientConfiguration]> {
+// Test init method
+isolated function testInitDataProvider() returns map<[boolean, string, graphql:ClientConfiguration]> {
     map<[boolean, string, graphql:ClientConfiguration]> dataSet = {
         "noneArgs": [false, "", {}]
     };
@@ -21,6 +22,60 @@ function testInit(boolean isIncludeEndpoint, string serviceUrl, graphql:ClientCo
     }
 
     if testClient is error {
-        test:assertFail("GraphQlClient is error");
+        test:assertFail("Unexpected: GraphQlClient is error");
+    }
+}
+
+// Test execute Method
+isolated function testExecuteDataProvider() returns map<[string]> {
+    map<[string]> dataSet = {
+        "includedUsernameQuery": [
+            string `
+            query($userName:String!) {
+                user(login: $userName){
+                    contributionsCollection {
+                        contributionCalendar {
+                            totalContributions
+                            weeks {
+                                contributionDays {
+                                    date
+                                    contributionCount
+                                    color
+                                    weekday
+                                }
+                            }
+                        }
+                    }
+                }
+            }`
+        ]
+    };
+
+    return dataSet;
+}
+
+@test:Config {
+    dataProvider: testExecuteDataProvider
+}
+function testExecute(string query) returns error? {
+    GraphQlClient|error graphqlClient = new;
+
+    if graphqlClient is error {
+        test:assertFail("Unexpected: GraphQlClient is error");
+    }
+
+    final graphql:Client mockedClient = test:mock(graphql:Client);
+    record {|anydata...;|} res = {"username": "test"};
+    test:prepare(mockedClient).when("execute").thenReturn(res);
+
+    graphql:GenericResponseWithErrors|record {|anydata...;|}|json|graphql:ClientError result = check graphqlClient.execute(query = query);
+    if result is graphql:GenericResponseWithErrors {
+        test:assertFail("Unexpected: executed response is graphql:GenericResponseWithErrors");
+    }
+    if result is json {
+        test:assertFail("Unexpected: executed response is json");
+    }
+    if result is graphql:ClientError {
+        test:assertFail("Unexpected: executed response is graphql:ClientError");
     }
 }
