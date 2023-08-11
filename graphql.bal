@@ -22,7 +22,7 @@ public class GraphQlClient {
         self.githubClient = check new (serviceUrl, configuration);
     }
 
-    # Query execute
+    # Query execute used free query
     # Auto setting variables(username) and headers(token)
     #
     # + query - Query
