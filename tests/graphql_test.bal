@@ -1,81 +1,133 @@
 import ballerina/graphql;
 import ballerina/test;
 
-// Test init method
-isolated function testInitDataProvider() returns map<[boolean, string, graphql:ClientConfiguration]> {
-    map<[boolean, string, graphql:ClientConfiguration]> dataSet = {
-        "noneArgs": [false, "", {}]
-    };
+# Test data for execute function
+#
+# + isOnlyRequireArgs - only require arguments flug
+# + query - arg query
+# + variables - arg variables
+# + operationName - arg operationName
+# + headers - arg headers
+# + executeMockedResponse - response of mocked execute function
+# + expected - expected value
+type TestExecuteData record {|
+    boolean isOnlyRequireArgs;
+    string query;
+    map<anydata>? variables;
+    string? operationName;
+    map<string|string[]>? headers;
+    graphql:GenericResponseWithErrors|record {|anydata...;|}|json|graphql:ClientError executeMockedResponse;
+    graphql:GenericResponseWithErrors|record {|anydata...;|}|json|graphql:ClientError expected;
 
-    return dataSet;
-}
+|};
 
-@test:Config {
-    dataProvider: testInitDataProvider
-}
-function testInit(boolean isIncludeEndpoint, string serviceUrl, graphql:ClientConfiguration configuration) {
-    final GraphQlClient|error testClient;
-    if isIncludeEndpoint {
-        testClient = new (serviceUrl, configuration);
-    } else {
-        testClient = new ();
-    }
-
-    if testClient is error {
-        test:assertFail("Unexpected: GraphQlClient is error");
-    }
-}
-
-// Test execute Method
-isolated function testExecuteDataProvider() returns map<[string]> {
-    map<[string]> dataSet = {
-        "includedUsernameQuery": [
-            string `
-            query($userName:String!) {
-                user(login: $userName){
-                    contributionsCollection {
-                        contributionCalendar {
-                            totalContributions
-                            weeks {
-                                contributionDays {
-                                    date
-                                    contributionCount
-                                    color
-                                    weekday
-                                }
-                            }
+# Test data provider for execute function
+# + return - test data
+isolated function testExecuteDataProvider() returns map<[TestExecuteData]> {
+    map<[TestExecuteData]> dataSet = {
+        "onlyQueryArgs": [
+            {
+                isOnlyRequireArgs: true,
+                query: string `
+                    query($userName:String!) {
+                        user(login: $userName){
+                            name
                         }
-                    }
-                }
-            }`
+                    }`,
+                variables: (),
+                operationName: (),
+                headers: (),
+                executeMockedResponse: <record {|anydata...;|}>{"data": {"user": {"name": "test-user"}}},
+                expected: <record {|anydata...;|}>{"data": {"user": {"name": "test-user"}}}
+            }
+        ],
+        "allArgs": [
+            {
+                isOnlyRequireArgs: false,
+                query: string `
+                    query($userName:String!) {
+                        user(login: $userName){
+                            name
+                        }
+                    }`,
+                variables: {username: "setting-user"},
+                operationName: "setting",
+                headers: {"Authorization": "bearer test1234567890"},
+                executeMockedResponse: <record {|anydata...;|}>{"data": {"user": {"name": "setting-user"}}},
+                expected: <record {|anydata...;|}>{"data": {"user": {"name": "setting-user"}}}
+            }
+        ],
+        "jsonResponse": [
+            {
+                isOnlyRequireArgs: false,
+                query: string `
+                    query($userName:String!) {
+                        user(login: $userName){
+                            name
+                        }
+                    }`,
+                variables: {username: "setting-user"},
+                operationName: "setting",
+                headers: {"Authorization": "bearer test1234567890"},
+                executeMockedResponse: <json>{"data": {"user": {"name": "setting-user"}}},
+                expected: <json>{"data": {"user": {"name": "setting-user"}}}
+            }
+        ],
+        "genericResponseWithErrorsResponse": [
+            {
+                isOnlyRequireArgs: false,
+                query: string `
+                    query($userName:String!) {
+                        user(login: $userName){
+                            name
+                        }
+                    }`,
+                variables: {username: "setting-user"},
+                operationName: "setting",
+                headers: {"Authorization": "bearer test1234567890"},
+                executeMockedResponse: <graphql:GenericResponseWithErrors>{extensions: (), data: (), errors: ()},
+                expected: <graphql:GenericResponseWithErrors>{extensions: (), data: (), errors: ()}
+            }
         ]
     };
 
     return dataSet;
 }
 
+# Test for execute function
+#
+# + testData - test data
+# + return - error?
 @test:Config {
     dataProvider: testExecuteDataProvider
 }
-function testExecute(string query) returns error? {
-    GraphQlClient|error graphqlClient = new;
+function testExecute(TestExecuteData testData) returns error? {
 
+    // Mock
+    githubClient = test:mock(graphql:Client);
+
+    // Prepare
+    final GraphQlClient|error graphqlClient = new;
     if graphqlClient is error {
         test:assertFail("Unexpected: GraphQlClient is error");
     }
 
-    final graphql:Client mockedClient = test:mock(graphql:Client);
-    record {|anydata...;|} res = {"username": "test"};
-    test:prepare(mockedClient).when("execute").thenReturn(res);
+    test:prepare(githubClient).when("execute").thenReturn(testData.executeMockedResponse);
 
-    graphql:GenericResponseWithErrors|record {|anydata...;|}|json|graphql:ClientError result = check graphqlClient.execute(query = query);
-    if result is graphql:GenericResponseWithErrors {
-        test:assertFail("Unexpected: executed response is graphql:GenericResponseWithErrors");
+    // execute
+    final graphql:GenericResponseWithErrors|record {|anydata...;|}|json|graphql:ClientError result;
+    if testData.isOnlyRequireArgs {
+        result = check graphqlClient.execute(testData.query);
+    } else {
+        result = check graphqlClient.execute(testData.query, testData.variables, testData.operationName, testData.headers);
     }
-    if result is json {
-        test:assertFail("Unexpected: executed response is json");
-    }
-    if result is graphql:ClientError {
-        test:assertFail("Unexpected: executed response is graphql:ClientError");
+
+    // assert
+    final graphql:GenericResponseWithErrors|record {|anydata...;|}|json|graphql:ClientError expected = testData.expected;
+    if expected is error {
+        final string message = expected.message();
+        test:assertFail("Unexpected: error graphql:ClientError");
+    } else {
+        test:assertEquals(result, expected, "Assert executed result");
     }
 }
