@@ -5,23 +5,10 @@ configurable string githubGraphqlEndpoint = GITHUB_GRAPHQL_ENDPOINT;
 configurable string githubUsername = os:getEnv(GITHUB_USERNAME);
 configurable string githubPersonalAccessToken = os:getEnv(GITHUB_PERSONAL_ACCESS_TOKEN);
 
+graphql:Client githubClient = check new (githubGraphqlEndpoint);
+
 // Github graphql client
 public class GraphQlClient {
-
-    private final graphql:Client githubClient;
-
-    # Constructor
-    #
-    # + serviceUrl - Endpoint url
-    # + configuration - Graphql client confuguration
-    # + return - error?
-    public function init(
-            string serviceUrl = githubGraphqlEndpoint,
-            graphql:ClientConfiguration configuration = {}
-    ) returns error? {
-        self.githubClient = check new (serviceUrl, configuration);
-    }
-
     # Query execute used free query
     # Auto setting variables(username) and headers(token)
     #
@@ -55,7 +42,7 @@ public class GraphQlClient {
             clonedHeaders[REQUEST_HEADER_AUTHORIZATION_KEY] = string `bearer ${githubPersonalAccessToken}`;
         }
 
-        record {|anydata...;|}|graphql:ClientError result = self.githubClient->execute(query, clonedVariables, operationName, clonedHeaders);
+        record {|anydata...;|}|graphql:ClientError result = githubClient->execute(query, clonedVariables, operationName, clonedHeaders);
 
         return result;
     };
