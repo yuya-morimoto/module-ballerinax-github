@@ -1,4 +1,4 @@
-final string GET_CONTRIBUTIONS = string `
+final string getContributions = string `
     query($userName:String!) {
         user(login: $userName){
             contributionsCollection {
