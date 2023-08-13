@@ -38,3 +38,7 @@ function main() {
 
 - Discuss code changes of the Ballerina project via [yuya-morimoto@zero-hack.jp](yuya-morimoto@zero-hack.jp).
 - Published ballerina central ([Ballerina Central](https://central.ballerina.io/zerohack/github))
+
+### License
+
+This project is licensed under the Apache-2.0 License, see the [LICENSE](./LICENSE) file for details
