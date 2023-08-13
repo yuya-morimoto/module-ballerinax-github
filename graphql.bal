@@ -52,7 +52,7 @@ public class GraphQlClient {
     # Get contributions data
     #
     # + return - contributions data
-    public function getContibutions() returns ContributionsResponse|error {
+    public function getContributions() returns ContributionsResponse|error {
         final graphql:GenericResponseWithErrors|record {|anydata...;|}|json result = check self.execute(query = getContributions);
         final ContributionsResponse responseModel = check result.cloneWithType();
         return responseModel;
