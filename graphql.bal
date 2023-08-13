@@ -5,31 +5,20 @@ configurable string githubGraphqlEndpoint = GITHUB_GRAPHQL_ENDPOINT;
 configurable string githubUsername = os:getEnv(GITHUB_USERNAME);
 configurable string githubPersonalAccessToken = os:getEnv(GITHUB_PERSONAL_ACCESS_TOKEN);
 
+graphql:Client githubClient = check new (githubGraphqlEndpoint);
+
 // Github graphql client
 public class GraphQlClient {
-
-    private final graphql:Client githubClient;
-
-    # Constructor
-    #
-    # + serviceUrl - Endpoint url
-    # + configuration - Graphql client confuguration
-    # + return - error?
-    public function init(
-            string serviceUrl = githubGraphqlEndpoint,
-            graphql:ClientConfiguration configuration = {}
-    ) returns error? {
-        self.githubClient = check new (serviceUrl, configuration);
-    }
-
     # Query execute used free query
-    # Auto setting variables(username) and headers(token)
     #
-    # + query - Query
-    # + variables - Query parameter
-    # + operationName - Operation name
-    # + headers - Request headers
-    # + return - Response
+    # Auto setting variables(username) and headers(token)
+    # Setting variables is congigurable variable
+    #
+    # + query - query
+    # + variables - query parameter
+    # + operationName - operation name
+    # + headers - request headers
+    # + return - response data
     public function execute(
             string query,
             map<anydata>? variables = (),
@@ -55,9 +44,18 @@ public class GraphQlClient {
             clonedHeaders[REQUEST_HEADER_AUTHORIZATION_KEY] = string `bearer ${githubPersonalAccessToken}`;
         }
 
-        record {|anydata...;|}|graphql:ClientError result = self.githubClient->execute(query, clonedVariables, operationName, clonedHeaders);
+        record {|anydata...;|}|graphql:ClientError result = githubClient->execute(query, clonedVariables, operationName, clonedHeaders);
 
         return result;
     };
+
+    # Get contributions data
+    #
+    # + return - contributions data
+    public function getContributions() returns ContributionsResponse|error {
+        final graphql:GenericResponseWithErrors|record {|anydata...;|}|json result = check self.execute(query = getContributions);
+        final ContributionsResponse responseModel = check result.cloneWithType();
+        return responseModel;
+    }
 
 }
