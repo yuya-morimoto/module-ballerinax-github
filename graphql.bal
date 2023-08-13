@@ -10,13 +10,15 @@ graphql:Client githubClient = check new (githubGraphqlEndpoint);
 // Github graphql client
 public class GraphQlClient {
     # Query execute used free query
-    # Auto setting variables(username) and headers(token)
     #
-    # + query - Query
-    # + variables - Query parameter
-    # + operationName - Operation name
-    # + headers - Request headers
-    # + return - Response
+    # Auto setting variables(username) and headers(token)
+    # Setting variables is congigurable variable
+    #
+    # + query - query
+    # + variables - query parameter
+    # + operationName - operation name
+    # + headers - request headers
+    # + return - response data
     public function execute(
             string query,
             map<anydata>? variables = (),
@@ -46,5 +48,14 @@ public class GraphQlClient {
 
         return result;
     };
+
+    # Get contributions data
+    #
+    # + return - contributions data
+    public function getContibutions() returns ContributionsResponse|error {
+        final graphql:GenericResponseWithErrors|record {|anydata...;|}|json result = check self.execute(query = getContributions);
+        final ContributionsResponse responseModel = check result.cloneWithType();
+        return responseModel;
+    }
 
 }

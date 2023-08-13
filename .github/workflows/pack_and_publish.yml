@@ -1,0 +1,25 @@
+name: Pack and Publish
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out ✊
+        uses: actions/checkout@v3
+
+      - name: Ballerina Build 🏠
+        uses: ballerina-platform/ballerina-action/@2201.7.1
+        with:
+          args: pack
+
+      - name: Ballerina Push 🚀
+        uses: ballerina-platform/ballerina-action/@2201.7.1
+        with:
+          args: push
+        env:
+          BALLERINA_CENTRAL_ACCESS_TOKEN: ${{ secrets.ZERO_HACK_BALLERINA_CENTRAL_ACCESS_TOKEN }}

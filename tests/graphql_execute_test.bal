@@ -125,7 +125,6 @@ function testExecute(TestExecuteData testData) returns error? {
     // assert
     final graphql:GenericResponseWithErrors|record {|anydata...;|}|json|graphql:ClientError expected = testData.expected;
     if expected is error {
-        final string message = expected.message();
         test:assertFail("Unexpected: error graphql:ClientError");
     } else {
         test:assertEquals(result, expected, "Assert executed result");
