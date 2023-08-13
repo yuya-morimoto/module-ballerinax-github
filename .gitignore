@@ -1,2 +1,5 @@
 target
 generated
+Config.toml
+!tests/Config.toml
+Dependencies.toml
