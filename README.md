@@ -20,7 +20,7 @@ This package is used to get specific data from GitHub.
 `githubUsername`: Your github username<br/>
 `githubPersonalAccessToken`: Your github personal access token<br/>
 
-#### 2. configurable variables settings
+#### 2. code sample
 
 ```ballerina
 import ballerina/io;
