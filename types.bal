@@ -1,3 +1,7 @@
+type ContributionsResponse record {|
+    ContributionsDataResponse data;
+|};
+
 type ContributionsDataResponse record {|
     ContributionsUserResponse user;
 |};
@@ -17,7 +21,7 @@ type ContributionCalendar record {|
 |};
 
 type Weeks record {|
-    ContributionDays contributionDays;
+    ContributionDays[] contributionDays;
 |};
 
 type ContributionDays record {|
