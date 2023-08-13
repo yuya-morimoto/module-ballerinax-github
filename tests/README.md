@@ -15,7 +15,7 @@ Create a file for each function or target...
 
 ## Naming roles
 
-| No  | Format                          | Description                                        |
-| --- | ------------------------------- | -------------------------------------------------- |
-| 1   | {filename}\_{function_name}.bal | test target function and file name are different   |
-| 2   | {function_name}.bal             | only one function and filename equal function name |
+| No  | Format                                      | Description                                        |
+| --- | ------------------------------------------- | -------------------------------------------------- |
+| 1   | {filename}\_{function_name(snake_case)}.bal | test target function and file name are different   |
+| 2   | {function_name(snake_case)}.bal             | only one function and filename equal function name |
