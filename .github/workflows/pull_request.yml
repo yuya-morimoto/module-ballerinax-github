@@ -13,12 +13,6 @@ jobs:
       - name: Ballerina Test 🛡
         uses: ballerina-platform/ballerina-action/@2201.7.1
         with:
-          args: test --test-report --code-coverage
-
-      - name: Check Failed 👀
-        if: fromJson(./target/report/test_results.json).failed > 0
-        run: echo "Test Failed ❎"
-
-      - name: Check Success 👀
-        if: fromJson(./target/report/test_results.json).failed <= 0
-        run: echo "Test Success ✅"
+          args: test --test-report --code-coverage --coverage-format=xml ./github
+      - name: Upload coverage reports to Codecov
+              uses: codecov/codecov-action@v3
