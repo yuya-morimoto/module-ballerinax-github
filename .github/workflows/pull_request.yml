@@ -3,7 +3,7 @@ name: Pull_Request
 on: [pull_request]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -13,6 +13,6 @@ jobs:
       - name: Ballerina Test 🛡
         uses: ballerina-platform/ballerina-action/@2201.7.1
         with:
-          args: test --test-report --code-coverage --coverage-format=xml ./github
+          args: test --test-report --code-coverage --coverage-format=svg
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
