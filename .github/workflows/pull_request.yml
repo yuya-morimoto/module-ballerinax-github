@@ -1,0 +1,24 @@
+name: Pull_Request
+
+on: [pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out ✊
+        uses: actions/checkout@v3
+
+      - name: Ballerina Test 🛡
+        uses: ballerina-platform/ballerina-action/@2201.7.1
+        with:
+          args: test --test-report --code-coverage
+
+      - name: Check Failed 👀
+        if: fromJson(./target/report/test_results.json).failed > 0
+        run: echo "Test Failed ❎"
+
+      - name: Check Success 👀
+        if: fromJson(./target/report/test_results.json).failed <= 0
+        run: echo "Test Success ✅"
