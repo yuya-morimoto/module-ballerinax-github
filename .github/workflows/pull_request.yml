@@ -15,4 +15,4 @@ jobs:
         with:
           args: test --test-report --code-coverage --coverage-format=xml ./github
       - name: Upload coverage reports to Codecov
-              uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v3
