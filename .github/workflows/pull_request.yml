@@ -13,10 +13,10 @@ jobs:
       - name: Ballerina Test 🛡
         uses: ballerina-platform/ballerina-action/@2201.7.1
         with:
-          args: test --test-report --code-coverage
+          args: test --test-report --code-coverage --coverage-format=xml
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         with:
-          files: ./target/report/test_results.json
+          files: ./target/report/github/coverage-report.xml
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
