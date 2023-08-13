@@ -96,7 +96,7 @@ function testGetContributions() returns error? {
     });
 
     // execute
-    final ContributionsResponse|error result = check graphqlClient.getContibutions();
+    final ContributionsResponse|error result = check graphqlClient.getContributions();
 
     // assert
     test:assertTrue(result is ContributionsResponse);
