@@ -10,6 +10,7 @@ final string getContributions = string `
                             contributionCount
                             color
                             weekday
+                            contributionLevel
                         }
                     }
                 }
