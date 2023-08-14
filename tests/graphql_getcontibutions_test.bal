@@ -19,43 +19,50 @@ function testGetContributions() returns error? {
                                         "contributionCount": 1,
                                         "date": "2022-08-14T00:00:00.000+00:00",
                                         "color": "#9be9a8",
-                                        "weekday": 0
+                                        "weekday": 0,
+                                        "contributionLevel": "FIRST_QUARTILE"
                                     },
                                     {
                                         "contributionCount": 9,
                                         "date": "2022-08-15T00:00:00.000+00:00",
                                         "color": "#9be9a8",
-                                        "weekday": 1
+                                        "weekday": 1,
+                                        "contributionLevel": "FIRST_QUARTILE"
                                     },
                                     {
                                         "contributionCount": 1,
                                         "date": "2022-08-16T00:00:00.000+00:00",
                                         "color": "#9be9a8",
-                                        "weekday": 2
+                                        "weekday": 2,
+                                        "contributionLevel": "FIRST_QUARTILE"
                                     },
                                     {
                                         "contributionCount": 0,
                                         "date": "2022-08-17T00:00:00.000+00:00",
                                         "color": "#9be9a8",
-                                        "weekday": 3
+                                        "weekday": 3,
+                                        "contributionLevel": "FIRST_QUARTILE"
                                     },
                                     {
                                         "contributionCount": 0,
                                         "date": "2022-08-18T00:00:00.000+00:00",
                                         "color": "#9be9a8",
-                                        "weekday": 4
+                                        "weekday": 4,
+                                        "contributionLevel": "FIRST_QUARTILE"
                                     },
                                     {
                                         "contributionCount": 0,
                                         "date": "2022-08-19T00:00:00.000+00:00",
                                         "color": "#9be9a8",
-                                        "weekday": 5
+                                        "weekday": 5,
+                                        "contributionLevel": "FIRST_QUARTILE"
                                     },
                                     {
                                         "contributionCount": 1,
                                         "date": "2022-08-20T00:00:00.000+00:00",
                                         "color": "#9be9a8",
-                                        "weekday": 6
+                                        "weekday": 6,
+                                        "contributionLevel": "FIRST_QUARTILE"
                                     }
                                 ]
                             }

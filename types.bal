@@ -29,4 +29,5 @@ public type ContributionDays record {|
     int contributionCount;
     string color;
     int weekday;
+    string contributionLevel;
 |};
