@@ -1,7 +1,7 @@
 [package]
 org = "zerohack"
 name = "github"
-version = "0.5.0"
+version = "0.6.0"
 authors = ["yuya-morimoto"]
 keywords = ["github"]
 repository = "https://github.com/zero-hack-org/module-zerohack-github"
