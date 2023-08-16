@@ -1,9 +1,9 @@
 import ballerina/graphql;
 import ballerina/os;
 
-configurable string githubGraphqlEndpoint = GITHUB_GRAPHQL_ENDPOINT;
-configurable string githubUsername = os:getEnv(GITHUB_USERNAME);
-configurable string githubPersonalAccessToken = os:getEnv(GITHUB_PERSONAL_ACCESS_TOKEN);
+configurable string githubGraphqlEndpoint = GRAPHQL_ENDPOINT;
+configurable string githubUsername = os:getEnv(ZEROHACK_GITHUB_USERNAME);
+configurable string githubPersonalAccessToken = os:getEnv(ZEROHACK_GITHUB_PERSONAL_ACCESS_TOKEN);
 
 graphql:Client githubClient = check new (githubGraphqlEndpoint);
 

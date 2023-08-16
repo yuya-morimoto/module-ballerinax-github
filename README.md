@@ -19,8 +19,8 @@ This package is used to get specific data from GitHub.
 #### 1. configurable variables settings
 
 `githubGraphqlEndpoint`: Default [GitHub GraphQL](https://api.github.com/graphql)<br/>
-`githubUsername`: Your github username<br/>
-`githubPersonalAccessToken`: Your github personal access token<br/>
+`githubUsername` or ENV:`ZEROHACK_GITHUB_USERNAME`: GitHub username <br/>
+`githubPersonalAccessToken` or ENV:`ZEROHACK_GITHUB_PERSONAL_ACCESS_TOKEN`: GitHub personal access token <br/>
 
 #### 2. code sample
 
